@@ -1,13 +1,14 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import secrets from "../secrets.json"
 
 import { Auth } from "aws-amplify";
 
 export default function Home() {
 
-  const username = "";
-  const pass = "";
-  const oldPass = "";
+  const username = secrets.username // || "";
+  const pass = secrets.password // || "";
+  const oldPass = secrets.password // || ""
   const code = "";
 
   const signIn = async () => {
@@ -70,7 +71,7 @@ export default function Home() {
   const signOut = async () => {
     try {
       const res = await Auth.signOut();
-      console.log('Signed Out',res)
+      console.log('Signed Out')
     } catch(e) {
       console.log(e)
     }
@@ -85,7 +86,7 @@ export default function Home() {
         <h1 className={styles.title}>NextJS Amplified</h1>
 
         <p className={styles.description}>Auth<br />
-          <a rel="noopenner" href="https://aws-amplify.github.io/amplify-js/api/classes/authclass.html" target="_blank"className={styles.small}>
+          <a rel="noopenner noreferrer" href="https://aws-amplify.github.io/amplify-js/api/classes/authclass.html" target="_blank"className={styles.small}>
             https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
           </a>
         </p>
@@ -128,16 +129,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <footer className={styles.footer}><p>NextJS Amplified</p></footer>
     </div>
   )
 }
