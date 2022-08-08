@@ -1,52 +1,130 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
+import { Auth } from "aws-amplify";
+
 export default function Home() {
+
+  const username = "";
+  const pass = "";
+  const oldPass = "";
+  const code = "";
+
+  const signIn = async () => {
+    try {
+      const res = await Auth.signIn(username,pass);
+      console.log(res)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  const changeP = async () => {
+    try {
+      const user = await Auth.signIn(username,pass);
+      console.log(user)
+      const res = await Auth.changePassword(user,oldPass,pass);
+      console.log(res)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  const completeNewPassword = async () => {
+    try {
+      const user = await Auth.signIn(username,pass);
+      const res = await Auth.completeNewPassword(user,pass);
+      console.log(res);
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  const forgotP = async () => {
+    try {
+      const res = await Auth.forgotPassword(username);
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const forgotPS = async () => {
+    try {
+      const res = await Auth.forgotPasswordSubmit(username, code, pass);
+      console.log(res);
+    } catch(e) {
+      console.log(e)
+    }
+  } // Collect confirmation code and new password , then
+
+  const forceChange = async () => {
+    try {
+      const res = await Auth.completeNewPassword(username,pass);
+      console.log(res);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const signOut = async () => {
+    try {
+      const res = await Auth.signOut();
+      console.log('Signed Out',res)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Head><title>NextJS Amplifed</title></Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>NextJS Amplified</h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+        <p className={styles.description}>Auth<br />
+          <a rel="noopenner" href="https://aws-amplify.github.io/amplify-js/api/classes/authclass.html" target="_blank"className={styles.small}>
+            https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
+          </a>
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          <div onClick={signIn} className={styles.card}>
+            <h3>Sign In &rarr;</h3>
+            <p><code>Auth.signIn</code></p>
+          </div>
+          <div onClick={changeP} className={styles.card}>
+            <h3>Change Password</h3>
+            <p><code>Auth.changePassword</code></p>
+          </div>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          <div onClick={completeNewPassword} className={styles.card}>
+            <h3>Complete New Password</h3>
+            <p><code>Auth.completeNewPassword</code></p>
+          </div>
+          <div onClick={forgotP} className={styles.card}>
+            <h3>Forgot Password &rarr;</h3>
+            <p><code>Auth.forgotPassword</code></p>
+          </div>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+          <div onClick={forgotPS} className={styles.card}>
+            <h3>Reset Password &rarr;</h3>
+            <p><code>Auth.forgotPasswordSubmit</code></p>
+          </div>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
+          <div onClick={forceChange}className={styles.card}>
+            <h3>ForceChange Password &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              <code>Auth.completeNewPassword</code>
             </p>
-          </a>
+          </div>
+
+          <div onClick={signOut}className={styles.card}>
+            <h3>SignOut &rarr;</h3>
+            <p><code>Auth.signOut</code></p>
+          </div>
         </div>
       </main>
 
