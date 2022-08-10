@@ -7,13 +7,14 @@ import { Auth } from "aws-amplify";
 export default function Home() {
 
   const username = secrets.username // || "";
+  const email = secrets.email
   const pass = secrets.password // || "";
   const oldPass = secrets.password // || ""
   const code = "";
 
   const signIn = async () => {
     try {
-      const res = await Auth.signIn(username,pass);
+      const res = await Auth.signIn(email,pass);
       console.log(res)
     } catch(e) {
       console.log(e)
@@ -68,12 +69,42 @@ export default function Home() {
     }
   }
 
+  const confirmSignUp = async() => {
+    try {
+      const res = await Auth.confirmSignUp(username,code);
+      console.log(res);
+    } catch (e){
+      console.log(e)
+    }
+  }
+
+  const resendSignUp = async() => {
+    try {
+      const res = await Auth.resendSignUp(username);
+      console.log(res);
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   const signOut = async () => {
     try {
       const res = await Auth.signOut();
       console.log('Signed Out')
     } catch(e) {
-      console.log(e)
+      console.error(e)
+    }
+  }
+
+  const signUp = async () => {
+    const password = pass;
+
+    console.log({ username:email,password,attributes: { email }})
+    try {
+      const res = await Auth.signUp({ username:email,password,attributes:{email}});
+      console.log(res)
+    } catch (e) {
+      console.error(e)
     }
   }
 
@@ -117,14 +148,27 @@ export default function Home() {
 
           <div onClick={forceChange}className={styles.card}>
             <h3>ForceChange Password &rarr;</h3>
-            <p>
-              <code>Auth.completeNewPassword</code>
-            </p>
+            <p><code>Auth.completeNewPassword</code></p>
+          </div>
+
+          <div onClick={resendSignUp}className={styles.card}>
+            <h3>Resend Verification Code &rarr;</h3>
+            <p><code>Auth.resendSignUp</code></p>
+          </div>
+
+          <div onClick={confirmSignUp} className={styles.card}>
+            <h3>Confirm User signup with code</h3>
+            <p><code>Auth.confirmSignUp</code></p>
           </div>
 
           <div onClick={signOut}className={styles.card}>
             <h3>SignOut &rarr;</h3>
             <p><code>Auth.signOut</code></p>
+          </div>
+
+          <div onClick={signUp}className={styles.card}>
+            <h3>SignUp &rarr;</h3>
+            <p><code>Auth.signUp</code></p>
           </div>
         </div>
       </main>

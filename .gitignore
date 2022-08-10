@@ -33,6 +33,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+
+amplify*
+aws-exports*
+secrets.json
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -53,6 +58,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-
-amplify
-secrets.json
