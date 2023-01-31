@@ -1,16 +1,18 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import secrets from "../secrets.json"
+// import secrets from "../secrets.json"
 
 import { Auth } from "aws-amplify";
+import { Authenticator } from "@aws-amplify/ui-react"
+import '@aws-amplify/ui-react/styles.css';
 
-export default function Home() {
+function Home() {
 
-  const username = secrets.username // || "";
-  const email = secrets.email
-  const pass = secrets.password // || "";
-  const oldPass = secrets.password // || ""
-  const code = "";
+  // const username = secrets.username // || "";
+  // const email = secrets.email
+  // const pass = secrets.password // || "";
+  // const oldPass = secrets.password // || ""
+  // const code = "";
 
   const signIn = async () => {
     try {
@@ -177,3 +179,14 @@ export default function Home() {
     </div>
   )
 }
+
+
+const HomeUI = () => {
+  return ( <Authenticator></Authenticator> );
+}
+ 
+export default HomeUI;
+
+
+
+// export default Home;
