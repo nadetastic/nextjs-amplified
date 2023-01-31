@@ -4,7 +4,7 @@ import config from '../src/aws-exports'
 
 Amplify.configure({
   ...config,
-  //ssr: true
+  ssr: true
 });
 
 
