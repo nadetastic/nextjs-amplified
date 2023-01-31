@@ -185,8 +185,8 @@ const HomeUI = () => {
   return ( <Authenticator></Authenticator> );
 }
  
-export default HomeUI;
+// export default HomeUI;
 
 
 
-// export default Home;
+export default Home;
