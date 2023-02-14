@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next dev -p 5173",
-    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next build",
+    "dev": "next dev -p 5173",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
