@@ -3,16 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next dev -p 5173",
+    "dev-old": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next dev -p 5173",
+    "dev": "NODE_OPTIONS='--inspect' next dev -p 5173",
+    "debug-http": "NODE_DEBUG=http next dev -p 5173",
     "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next build",
     "start": "next start"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^3.3.0",
-    "aws-amplify": "^4.3.12",
+    "@aws-amplify/ui-react": "^4.3.8",
+    "aws-amplify": "^5.0.14",
     "cross-env": "^7.0.3",
-    "next": "11.1.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "next": "^12.3.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

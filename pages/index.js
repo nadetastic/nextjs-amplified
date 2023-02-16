@@ -2,17 +2,26 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 // import secrets from "../secrets.json"
 
-import { Auth } from "aws-amplify";
+import { Auth, withSSRContext } from "aws-amplify";
 import { Authenticator } from "@aws-amplify/ui-react"
 import '@aws-amplify/ui-react/styles.css';
 
-function Home() {
+function Home(props) {
 
   // const username = secrets.username // || "";
-  // const email = secrets.email
-  // const pass = secrets.password // || "";
+  const email = "dkkiuna11@gmail.com";
+  const pass = "Abcd1234";
   // const oldPass = secrets.password // || ""
   // const code = "";
+
+  const current = async () => {
+    try {
+      const res = await Auth.currentAuthenticatedUser();
+      console.log(res)
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   const signIn = async () => {
     try {
@@ -123,11 +132,15 @@ function Home() {
             https://aws-amplify.github.io/amplify-js/api/classes/authclass.html
           </a>
         </p>
-
+        <p>SSR Respons: {props.data}</p>
         <div className={styles.grid}>
           <div onClick={signIn} className={styles.card}>
             <h3>Sign In &rarr;</h3>
             <p><code>Auth.signIn</code></p>
+          </div>
+          <div onClick={current} className={styles.card}>
+            <h3>Current User</h3>
+            <p><code>Auth.currentAuthenticatedUser</code></p>
           </div>
           <div onClick={changeP} className={styles.card}>
             <h3>Change Password</h3>
@@ -187,6 +200,19 @@ const HomeUI = () => {
  
 // export default HomeUI;
 
+export async function getServerSideProps(context) {
+  const { Auth } = withSSRContext(context);
+  try {
+    const user = await Auth.currentAuthenticatedUser();
+    return {
+      props: { data: JSON.stringify(user) }, // will be passed to the page component as props
+    }
+  } catch (err) {
+    return {
+      props: {data: JSON.stringify(err)}, // will be passed to the page component as props
+    }
+  }
+}
 
 
 export default Home;
