@@ -3,15 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next dev -p 5173",
-    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' next build",
+    "dev": "next dev -p 5173",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.8",
     "aws-amplify": "^5.0.15",
-    "cross-env": "^7.0.3",
-    "next": "11.1.2",
+    "next": "^12.3.4",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   }
