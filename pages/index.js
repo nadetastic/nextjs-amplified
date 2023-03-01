@@ -1,22 +1,21 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import React from 'react'
 // import secrets from "../secrets.json"
 
 import { Auth } from "aws-amplify";
 import { Authenticator } from "@aws-amplify/ui-react"
 import '@aws-amplify/ui-react/styles.css';
 
+const initialUserInfo = {username:'',password:''}
+
 function Home() {
 
-  // const username = secrets.username // || "";
-  // const email = secrets.email
-  // const pass = secrets.password // || "";
-  // const oldPass = secrets.password // || ""
-  // const code = "";
+  const [userinfo,setUserinfo] = React.useState(initialUserInfo);
 
   const signIn = async () => {
     try {
-      const res = await Auth.signIn(email,pass);
+      const res = await Auth.signIn(userinfo.username,userinfo.password);
       console.log(res)
     } catch(e) {
       console.log(e)
@@ -25,10 +24,10 @@ function Home() {
 
   const changeP = async () => {
     try {
-      const user = await Auth.signIn(username,pass);
-      console.log(user)
-      const res = await Auth.changePassword(user,oldPass,pass);
-      console.log(res)
+      // const user = await Auth.signIn(userinfo.username,userinfo.password);
+      // console.log(user)
+      // const res = await Auth.changePassword(user,oldPass,pass);
+      // console.log(res)
     } catch(e) {
       console.log(e)
     }
@@ -36,9 +35,9 @@ function Home() {
 
   const completeNewPassword = async () => {
     try {
-      const user = await Auth.signIn(username,pass);
-      const res = await Auth.completeNewPassword(user,pass);
-      console.log(res);
+      // const user = await Auth.signIn(username,pass);
+      // const res = await Auth.completeNewPassword(user,pass);
+      // console.log(res);
     } catch(e) {
       console.log(e)
     }
@@ -46,8 +45,8 @@ function Home() {
 
   const forgotP = async () => {
     try {
-      const res = await Auth.forgotPassword(username);
-      console.log(res);
+      // const res = await Auth.forgotPassword(username);
+      // console.log(res);
     } catch (e) {
       console.log(e);
     }
@@ -55,8 +54,8 @@ function Home() {
 
   const forgotPS = async () => {
     try {
-      const res = await Auth.forgotPasswordSubmit(username, code, pass);
-      console.log(res);
+      // const res = await Auth.forgotPasswordSubmit(username, code, pass);
+      // console.log(res);
     } catch(e) {
       console.log(e)
     }
@@ -64,8 +63,8 @@ function Home() {
 
   const forceChange = async () => {
     try {
-      const res = await Auth.completeNewPassword(username,pass);
-      console.log(res);
+      // const res = await Auth.completeNewPassword(username,pass);
+      // console.log(res);
     } catch(e) {
       console.log(e);
     }
@@ -73,7 +72,7 @@ function Home() {
 
   const confirmSignUp = async() => {
     try {
-      const res = await Auth.confirmSignUp(username,code);
+      const res = await Auth.confirmSignUp(userinfo.username,userinfo.code);
       console.log(res);
     } catch (e){
       console.log(e)
@@ -82,7 +81,7 @@ function Home() {
 
   const resendSignUp = async() => {
     try {
-      const res = await Auth.resendSignUp(username);
+      const res = await Auth.resendSignUp(userinfo.username);
       console.log(res);
     } catch(e) {
       console.log(e);
@@ -91,7 +90,7 @@ function Home() {
 
   const signOut = async () => {
     try {
-      const res = await Auth.signOut();
+      await Auth.signOut();
       console.log('Signed Out')
     } catch(e) {
       console.error(e)
@@ -99,11 +98,11 @@ function Home() {
   }
 
   const signUp = async () => {
-    const password = pass;
+    // const password = pass;
 
-    console.log({ username:email,password,attributes: { email }})
+    // console.log({ username:email,password,attributes: { email }})
     try {
-      const res = await Auth.signUp({ username:email,password,attributes:{email}});
+      const res = await Auth.signUp(userinfo.username,userinfo.password);
       console.log(res)
     } catch (e) {
       console.error(e)
@@ -170,6 +169,8 @@ function Home() {
 
           <div onClick={signUp}className={styles.card}>
             <h3>SignUp &rarr;</h3>
+            <input type="text" placeholder="email" onChange={e => setUserinfo({...userinfo, username:e.target.value}) } /><br />
+            <input type="text" placeholder="password" onChange={e => setUserinfo({...userinfo, password:e.target.value}) } />
             <p><code>Auth.signUp</code></p>
           </div>
         </div>
