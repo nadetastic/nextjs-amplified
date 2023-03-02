@@ -3,31 +3,22 @@
 
 const awsmobile = {
     "aws_project_region": "us-east-1",
-    "aws_cognito_identity_pool_id": "us-east-1:70efeb97-3df8-4ecc-b1ec-e9cbcdeea891",
+    "aws_cloud_logic_custom": [
+        {
+            "name": "TestAPIfromAmplify",
+            "endpoint": "https://ib3kunauj2.execute-api.us-east-1.amazonaws.com/dev",
+            "region": "us-east-1"
+        }
+    ],
+    "aws_cognito_identity_pool_id": "us-east-1:ad3c7262-1373-488d-94ed-920b69ec062a",
     "aws_cognito_region": "us-east-1",
-    "aws_user_pools_id": "us-east-1_OgI9b3GOP",
-    "aws_user_pools_web_client_id": "1g3rltbnh4f1pe457d2sfeff8s",
-    "oauth": {
-        "domain": "authemailusernameb2b52776-b2b52776-dev.auth.us-east-1.amazoncognito.com",
-        "scope": [
-            "phone",
-            "email",
-            "openid",
-            "profile",
-            "aws.cognito.signin.user.admin"
-        ],
-        "redirectSignIn": "http://localhost:5173/",
-        "redirectSignOut": "http://localhost:5173/",
-        "responseType": "code"
-    },
-    "federationTarget": "COGNITO_USER_AND_IDENTITY_POOLS",
+    "aws_user_pools_id": "us-east-1_jiq8FXJLs",
+    "aws_user_pools_web_client_id": "1po8u1bde8bl1smvm904nfvojl",
+    "oauth": {},
     "aws_cognito_username_attributes": [
-        "EMAIL",
-        "PHONE_NUMBER"
+        "EMAIL"
     ],
-    "aws_cognito_social_providers": [
-        "GOOGLE"
-    ],
+    "aws_cognito_social_providers": [],
     "aws_cognito_signup_attributes": [
         "EMAIL"
     ],

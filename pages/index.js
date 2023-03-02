@@ -2,21 +2,37 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 // import secrets from "../secrets.json"
 
-import { Auth } from "aws-amplify";
+import { Auth, API, withSSRContext } from "aws-amplify";
 import { Authenticator } from "@aws-amplify/ui-react"
 import '@aws-amplify/ui-react/styles.css';
+import { useState } from 'react';
 
-function Home() {
+function Home(props) {
 
-  // const username = secrets.username // || "";
-  // const email = secrets.email
-  // const pass = secrets.password // || "";
-  // const oldPass = secrets.password // || ""
-  // const code = "";
+  const [userinfo, set_userinfo] = useState()
+  const [amplifyuser, set_amplifyuser] = useState()
 
+  const signUp = async () => {
+    try {
+      const res = await Auth.signUp(userinfo.username,userinfo.password);
+      console.log(res)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const confirmSignUp = async() => {
+    try {
+      const res = await Auth.confirmSignUp(userinfo.username,userinfo.code);
+      console.log(res);
+    } catch (e){
+      console.log(e)
+    }
+  }
+  
   const signIn = async () => {
     try {
-      const res = await Auth.signIn(email,pass);
+      const res = await Auth.signIn(userinfo.username,userinfo.password);
       console.log(res)
     } catch(e) {
       console.log(e)
@@ -71,15 +87,6 @@ function Home() {
     }
   }
 
-  const confirmSignUp = async() => {
-    try {
-      const res = await Auth.confirmSignUp(username,code);
-      console.log(res);
-    } catch (e){
-      console.log(e)
-    }
-  }
-
   const resendSignUp = async() => {
     try {
       const res = await Auth.resendSignUp(username);
@@ -91,24 +98,28 @@ function Home() {
 
   const signOut = async () => {
     try {
-      const res = await Auth.signOut();
+      await Auth.signOut();
       console.log('Signed Out')
     } catch(e) {
       console.error(e)
     }
   }
 
-  const signUp = async () => {
-    const password = pass;
-
-    console.log({ username:email,password,attributes: { email }})
+  const get = async () => {
+    const myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`
+      }
+    };
     try {
-      const res = await Auth.signUp({ username:email,password,attributes:{email}});
-      console.log(res)
-    } catch (e) {
-      console.error(e)
+      const res = await API.get('MyAPI', '/', myInit);
+      console.log(res);
+    } catch(e) {
+      console.log(e)
     }
   }
+
+
 
 
   return (
@@ -124,11 +135,33 @@ function Home() {
           </a>
         </p>
 
+        <p>userinfo: {JSON.stringify(userinfo)}</p>
+        <p>FROM gSSP: {props.data}</p>
+
+        <div>
+          <h3>Sign Up/ Sign In</h3>
+          <input onChange={(e) => set_userinfo({...userinfo, username: e.target.value})} placeholder="username" /><br />
+          <input onChange={(e) => set_userinfo({...userinfo, password: e.target.value})} placeholder="password" /><br />
+          <button onClick={signUp}>Auth.signUp</button><br />
+          <button onClick={signIn}>Auth.signIn</button>
+        </div>
+
+        <div>
+          <h3>Confirm SignUp</h3>
+          <input onChange={(e) => set_userinfo({...userinfo, code: e.target.value})} placeholder="code" /><br />
+          <button onClick={confirmSignUp}>Auth.confirmSignUp</button>
+        </div>
+        
+        <div>
+          <h3>Sign Out</h3>
+          <button onClick={signOut}>Auth.signOut</button>
+        </div>
+
+        <div>
+          <button onClick={get}>API.get</button>
+        </div>
+
         <div className={styles.grid}>
-          <div onClick={signIn} className={styles.card}>
-            <h3>Sign In &rarr;</h3>
-            <p><code>Auth.signIn</code></p>
-          </div>
           <div onClick={changeP} className={styles.card}>
             <h3>Change Password</h3>
             <p><code>Auth.changePassword</code></p>
@@ -158,20 +191,9 @@ function Home() {
             <p><code>Auth.resendSignUp</code></p>
           </div>
 
-          <div onClick={confirmSignUp} className={styles.card}>
-            <h3>Confirm User signup with code</h3>
-            <p><code>Auth.confirmSignUp</code></p>
-          </div>
+  
 
-          <div onClick={signOut}className={styles.card}>
-            <h3>SignOut &rarr;</h3>
-            <p><code>Auth.signOut</code></p>
-          </div>
-
-          <div onClick={signUp}className={styles.card}>
-            <h3>SignUp &rarr;</h3>
-            <p><code>Auth.signUp</code></p>
-          </div>
+       
         </div>
       </main>
 
@@ -190,3 +212,31 @@ const HomeUI = () => {
 
 
 export default Home;
+
+export async function getServerSideProps(context) {
+
+  const { Auth, API } = withSSRContext(context)
+
+  try {
+    // const user = await Auth.currentAuthenticatedUser()
+    const myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`
+      }
+    };
+    const data = await API.get('MyAPI', '/', myInit)
+    console.log(data)
+    return {
+      props: {
+        data: JSON.stringify(data)
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    return {
+      props: {
+        data: JSON.stringify(err)
+      }
+    }
+  }
+}
